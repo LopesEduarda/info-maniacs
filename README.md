@@ -69,7 +69,7 @@ Este comando irá:
 
 - **Frontend**: http://localhost:3000
 - **API Swagger**: http://localhost:3000/api/swagger
-- **MySQL**: localhost:3306 (usuário: `taskuser`, senha: `taskpassword`)
+- 
 
 ### 5. Primeiro acesso
 
