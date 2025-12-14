@@ -41,7 +41,7 @@ Não é necessário instalar Node.js, MySQL ou outras dependências localmente. 
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/LopesEduarda/info-maniacs.git
 cd infomaniacs
 ```
 
@@ -69,7 +69,7 @@ Este comando irá:
 
 - **Frontend**: http://localhost:3000
 - **API Swagger**: http://localhost:3000/api/swagger
-- **MySQL**: localhost:3306 (usuário: `taskuser`, senha: `taskpassword`)
+- 
 
 ### 5. Primeiro acesso
 
