@@ -1,0 +1,51 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: task_manager_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: task_manager
+      MYSQL_USER: taskuser
+      MYSQL_PASSWORD: taskpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task_manager_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://taskuser:taskpassword@mysql:3306/task_manager
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: taskuser
+      DB_PASSWORD: taskpassword
+      DB_NAME: task_manager
+      JWT_SECRET: lEZDn33b4bX/MqGFRxmYy/DStl7qEUWdMdv5Ca6dflk=
+      JWT_EXPIRES_IN: 7d
+      JWT_REFRESH_EXPIRES_IN: 30d
+      NODE_ENV: development
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+
+volumes:
+  mysql_data:
