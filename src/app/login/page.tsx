@@ -16,10 +16,10 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export const dynamic = 'force-dynamic'
 
-export default function LoginPage() {
+function LoginContent() {
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  
+
   const { login, isAuthenticated } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -61,7 +61,7 @@ export default function LoginPage() {
     }
   }
 
-  const content = (
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
@@ -145,10 +145,18 @@ export default function LoginPage() {
       </div>
     </div>
   )
+}
 
+export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
-      {content}
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          Carregando...
+        </div>
+      }
+    >
+      <LoginContent />
     </Suspense>
   )
 }
