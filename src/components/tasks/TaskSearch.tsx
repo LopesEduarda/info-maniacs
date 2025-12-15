@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/Input'
+import { debounce } from 'lodash'
 
 interface TaskSearchProps {
   searchQuery: string
@@ -10,6 +11,13 @@ interface TaskSearchProps {
 
 export function TaskSearch({ searchQuery, onSearchChange }: TaskSearchProps) {
   const [localQuery, setLocalQuery] = useState(searchQuery)
+
+  useEffect(() => {
+      const debouncedSearch = debounce((query: string) => {
+      onSearchChange(query)
+    }, 500)
+    debouncedSearch(localQuery)
+  }, [localQuery, onSearchChange])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
