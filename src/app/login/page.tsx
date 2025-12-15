@@ -14,6 +14,8 @@ import { Alert } from '@/components/ui/Alert'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
+export const dynamic = 'force-dynamic'
+
 export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
