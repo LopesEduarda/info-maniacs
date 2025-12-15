@@ -42,7 +42,7 @@ Não é necessário instalar Node.js, MySQL ou outras dependências localmente. 
 
 ```bash
 git clone https://github.com/LopesEduarda/info-maniacs.git
-cd infomaniacs
+cd info-maniacs
 ```
 
 ### 2. Configure as variáveis de ambiente (opcional)
