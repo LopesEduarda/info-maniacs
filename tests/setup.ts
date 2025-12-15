@@ -29,7 +29,11 @@ if (!process.env.DB_NAME) {
 }
 
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'test'
+  Object.defineProperty(process.env, 'NODE_ENV', {
+    value: 'test',
+    writable: false,
+    configurable: true,
+  })
 }
 
 afterAll(async () => {
