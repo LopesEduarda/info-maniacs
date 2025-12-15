@@ -103,16 +103,34 @@ export function TaskItem({ task, onUpdated }: TaskItemProps) {
           )}
 
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span>
-              Criada em:{' '}
-              {new Date(task.created_at).toLocaleDateString('pt-BR')}
-            </span>
-            {task.updated_at !== task.created_at && (
-              <span>
-                Atualizada em:{' '}
-                {new Date(task.updated_at).toLocaleDateString('pt-BR')}
-              </span>
-            )}
+            {(() => {
+              const created =
+                task.createdAt ?? task.created_at ?? (task as any).created ?? null
+              const updated =
+                task.updatedAt ?? task.updated_at ?? (task as any).updated ?? null
+
+              const createdDate = created ? new Date(created) : null
+              const updatedDate = updated ? new Date(updated) : null
+
+              return (
+                <>
+                  <span>
+                    Criada em:{' '}
+                    {createdDate
+                      ? createdDate.toLocaleDateString('pt-BR')
+                      : '—'}
+                  </span>
+                  {updatedDate &&
+                    createdDate &&
+                    updatedDate.getTime() !== createdDate.getTime() && (
+                      <span>
+                        Atualizada em:{' '}
+                        {updatedDate.toLocaleDateString('pt-BR')}
+                      </span>
+                    )}
+                </>
+              )
+            })()}
           </div>
         </div>
 
