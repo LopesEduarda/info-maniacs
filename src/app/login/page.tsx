@@ -1,18 +1,11 @@
-import { Suspense } from 'react'
 import LoginContent from './LoginContent'
 
 export const dynamic = 'force-dynamic'
 
-export default function LoginPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          Carregando...
-        </div>
-      }
-    >
-      <LoginContent />
-    </Suspense>
-  )
+type LoginPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>
+}
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  return <LoginContent searchParams={searchParams} />
 }

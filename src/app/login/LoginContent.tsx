@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { z } from 'zod'
 import { loginSchema } from '@/schemas/auth'
@@ -14,13 +14,21 @@ import { Alert } from '@/components/ui/Alert'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
-export default function LoginContent() {
+type LoginContentProps = {
+  searchParams?: Record<string, string | string[] | undefined>
+}
+
+export default function LoginContent({ searchParams }: LoginContentProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
   const { login, isAuthenticated } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams()
+
+  const registered = useMemo(() => {
+    const value = searchParams?.registered
+    return Array.isArray(value) ? value[0] : value
+  }, [searchParams])
 
   const {
     register,
@@ -31,11 +39,11 @@ export default function LoginContent() {
   })
 
   useEffect(() => {
-    if (searchParams.get('registered') === 'true') {
+    if (registered === 'true') {
       setSuccessMessage('Conta criada com sucesso! Faça login para continuar.')
       router.replace('/login')
     }
-  }, [searchParams, router])
+  }, [registered, router])
 
   useEffect(() => {
     if (isAuthenticated) {
