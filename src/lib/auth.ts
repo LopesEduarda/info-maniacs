@@ -2,15 +2,16 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import type { JwtPayload } from '@/types/api'
 
-const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '30d'
 
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET não está definido nas variáveis de ambiente')
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET
+  if (!secret) {
+    throw new Error('JWT_SECRET não está definido nas variáveis de ambiente')
+  }
+  return secret
 }
-
-const JWT_SECRET_KEY: string = JWT_SECRET
 
 export async function hashPassword(password: string): Promise<string> {
   const saltRounds = 12
@@ -30,7 +31,9 @@ export function generateToken(userId: number, email: string): string {
     email,
   }
 
-  return jwt.sign(payload as jwt.JwtPayload, JWT_SECRET_KEY, {
+  const secret = getJwtSecret()
+
+  return jwt.sign(payload as jwt.JwtPayload, secret, {
     expiresIn: JWT_EXPIRES_IN,
   } as jwt.SignOptions)
 }
@@ -41,14 +44,17 @@ export function generateRefreshToken(userId: number, email: string): string {
     email,
   }
 
-  return jwt.sign(payload as jwt.JwtPayload, JWT_SECRET_KEY, {
+  const secret = getJwtSecret()
+
+  return jwt.sign(payload as jwt.JwtPayload, secret, {
     expiresIn: JWT_REFRESH_EXPIRES_IN,
   } as jwt.SignOptions)
 }
 
 export function verifyToken(token: string): JwtPayload | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET_KEY)
+    const secret = getJwtSecret()
+    const decoded = jwt.verify(token, secret)
     
     if (typeof decoded === 'object' && decoded !== null && 'userId' in decoded && 'email' in decoded) {
       return decoded as JwtPayload
