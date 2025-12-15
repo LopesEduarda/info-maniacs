@@ -32,7 +32,7 @@ export function generateToken(userId: number, email: string): string {
 
   return jwt.sign(payload as jwt.JwtPayload, JWT_SECRET_KEY, {
     expiresIn: JWT_EXPIRES_IN,
-  })
+  } as jwt.SignOptions)
 }
 
 export function generateRefreshToken(userId: number, email: string): string {
@@ -43,7 +43,7 @@ export function generateRefreshToken(userId: number, email: string): string {
 
   return jwt.sign(payload as jwt.JwtPayload, JWT_SECRET_KEY, {
     expiresIn: JWT_REFRESH_EXPIRES_IN,
-  })
+  } as jwt.SignOptions)
 }
 
 export function verifyToken(token: string): JwtPayload | null {
